@@ -68,6 +68,33 @@ class FlyingCreature(Creature):
             target.hp = 0
         print(f"{target.name} HP is now {target.hp}")
 
+# ===============================
+# FireCreature Branch
+# ===============================
+
+class FireCreature(Creature):
+    def __init__(self, name, hp, attack_power):
+        super().__init__(name, hp, attack_power)
+        self.fire_level = 0
+
+    def emit_fire(self, new_fire_level):
+        self.fire_level = max(0, min(100, new_fire_level))
+        print(f"{self.name} emits fire at level {self.fire_level}!")
+
+    def attack(self, target):
+        if not self.is_alive():
+            print(f"{self.name} cannot attack because it is defeated.")
+            return
+
+        fire_bonus = self.fire_level // 10
+        total_damage = self.attack_power + fire_bonus
+        print(f"{self.name} engulfs {target.name} in flames at fire level {self.fire_level}!")
+        print(f"{self.name} deals {total_damage} fire damage!")
+        target.hp -= total_damage
+        if target.hp < 0:
+            target.hp = 0
+        print(f"{target.name} HP is now {target.hp}")
+
 if __name__ == "__main__":
     print("=== Creature Class Tests ===\n")
 
@@ -140,6 +167,18 @@ if __name__ == "__main__":
     hawk.attack(dummy)
     print(f"Dummy HP should be 32 → Actual: {dummy.hp}")
     dummy.attack(hawk)
+    print()
+    print("=== Tests Completed ===")
+    print()
+
+    print("=== FireCreature Tests ===\n")
+    phoenix = FireCreature("Flame Phoenix", 70, 10)
+    phoenix.emit_fire(50)
+    print(f"Fire level should be 50 → Actual: {phoenix.fire_level}")
+
+    dummy = Creature("Practice Dummy", 40, 0)
+    phoenix.attack(dummy)
+    print(f"Dummy HP should be 25 → Actual: {dummy.hp}")
     print()
     print("=== Tests Completed ===")
     print()
